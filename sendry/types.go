@@ -947,3 +947,829 @@ type InviteTeamMemberParams struct {
 type UpdateTeamMemberRoleParams struct {
 	Role string `json:"role"`
 }
+
+// ---------------------------------------------------------------------------
+// Dedicated IPs
+// ---------------------------------------------------------------------------
+
+// DedicatedIpAssignment describes a domain-to-IP assignment summary embedded
+// inside a DedicatedIp.
+type DedicatedIpAssignment struct {
+	ID         string `json:"id"`
+	DomainID   string `json:"domain_id"`
+	DomainName string `json:"domain_name"`
+	CreatedAt  string `json:"created_at"`
+}
+
+// DedicatedIp represents a dedicated sending IP provisioned for the organisation.
+type DedicatedIp struct {
+	ID             string                  `json:"id"`
+	IPAddress      string                  `json:"ip_address"`
+	Provider       string                  `json:"provider"`
+	Status         string                  `json:"status"` // "provisioning" | "warming" | "active" | "inactive"
+	WarmupDay      int                     `json:"warmup_day"`
+	WarmupProgress int                     `json:"warmup_progress"`
+	PoolName       *string                 `json:"pool_name"`
+	Assignments    []DedicatedIpAssignment `json:"assignments,omitempty"`
+	CreatedAt      string                  `json:"created_at"`
+}
+
+// ProvisionDedicatedIpParams are the parameters for provisioning a new dedicated IP.
+type ProvisionDedicatedIpParams struct {
+	Provider string `json:"provider,omitempty"` // "ses" | "mailgun"
+}
+
+// AssignIpParams are the parameters for assigning a dedicated IP to a domain.
+type AssignIpParams struct {
+	DomainID string `json:"domain_id"`
+}
+
+// IpAssignment is returned after assigning a dedicated IP to a domain.
+type IpAssignment struct {
+	ID        string `json:"id"`
+	IPID      string `json:"ip_id"`
+	DomainID  string `json:"domain_id"`
+	CreatedAt string `json:"created_at"`
+}
+
+// ---------------------------------------------------------------------------
+// Deliverability
+// ---------------------------------------------------------------------------
+
+// ReputationQuery are the query parameters for the reputation overview endpoint.
+type ReputationQuery struct {
+	DomainID string `json:"domain_id,omitempty"`
+	Days     *int   `json:"days,omitempty"`
+}
+
+// ReputationHistoryQuery are the query parameters for reputation history.
+type ReputationHistoryQuery struct {
+	From string `json:"from,omitempty"`
+	To   string `json:"to,omitempty"`
+}
+
+// ReputationFactors holds the underlying factors that make up a reputation score.
+type ReputationFactors struct {
+	BounceRate     float64 `json:"bounceRate"`
+	ComplaintRate  float64 `json:"complaintRate"`
+	DeliveryRate   float64 `json:"deliveryRate"`
+	EngagementRate float64 `json:"engagementRate"`
+}
+
+// ReputationCurrent describes the current reputation snapshot.
+type ReputationCurrent struct {
+	Score           int               `json:"score"`
+	Rating          string            `json:"rating"`
+	Factors         ReputationFactors `json:"factors"`
+	Recommendations []string          `json:"recommendations"`
+}
+
+// ReputationSnapshot is a single historical reputation data point.
+type ReputationSnapshot struct {
+	Date            string  `json:"date"`
+	TotalSent       int     `json:"total_sent"`
+	TotalDelivered  int     `json:"total_delivered"`
+	TotalBounced    int     `json:"total_bounced"`
+	TotalComplained int     `json:"total_complained"`
+	TotalOpened     int     `json:"total_opened"`
+	TotalClicked    int     `json:"total_clicked"`
+	DeliveryRate    float64 `json:"delivery_rate"`
+	BounceRate      float64 `json:"bounce_rate"`
+	ComplaintRate   float64 `json:"complaint_rate"`
+	OpenRate        float64 `json:"open_rate"`
+	ClickRate       float64 `json:"click_rate"`
+	ReputationScore int     `json:"reputation_score"`
+}
+
+// ReputationDomain summarises reputation for a single domain.
+type ReputationDomain struct {
+	DomainID   string `json:"domain_id"`
+	DomainName string `json:"domain_name"`
+	Score      int    `json:"score"`
+	Rating     string `json:"rating"`
+}
+
+// ReputationResponse is returned by the reputation overview endpoint.
+type ReputationResponse struct {
+	Current ReputationCurrent    `json:"current"`
+	History []ReputationSnapshot `json:"history"`
+	Domains []ReputationDomain   `json:"domains"`
+}
+
+// BlocklistQuery are the query parameters for fetching blocklist status.
+type BlocklistQuery struct {
+	Target     string `json:"target,omitempty"`
+	TargetType string `json:"target_type,omitempty"` // "domain" | "ip"
+}
+
+// BlocklistCheckBody are the parameters for an on-demand blocklist check.
+type BlocklistCheckBody struct {
+	Target     string `json:"target"`
+	TargetType string `json:"target_type"` // "domain" | "ip"
+}
+
+// BlocklistCheckItem is a single blocklist check result.
+type BlocklistCheckItem struct {
+	ID             string  `json:"id"`
+	Target         string  `json:"target"`
+	TargetType     string  `json:"target_type"`
+	Provider       string  `json:"provider"`
+	Listed         bool    `json:"listed"`
+	ListingReason  *string `json:"listing_reason"`
+	ResponseTimeMS *int    `json:"response_time_ms"`
+	CheckedAt      string  `json:"checked_at"`
+}
+
+// BlocklistAlertItem is an active blocklist alert.
+type BlocklistAlertItem struct {
+	ID         string  `json:"id"`
+	Target     string  `json:"target"`
+	TargetType string  `json:"target_type"`
+	Provider   string  `json:"provider"`
+	Status     string  `json:"status"`
+	ListedAt   string  `json:"listed_at"`
+	ResolvedAt *string `json:"resolved_at"`
+}
+
+// BlocklistSummary summarises blocklist check totals.
+type BlocklistSummary struct {
+	TotalTargets int `json:"total_targets"`
+	ListedCount  int `json:"listed_count"`
+	CleanCount   int `json:"clean_count"`
+}
+
+// BlocklistResponse is returned by the blocklist status endpoint.
+type BlocklistResponse struct {
+	Checks  []BlocklistCheckItem `json:"checks"`
+	Alerts  []BlocklistAlertItem `json:"alerts"`
+	Summary BlocklistSummary     `json:"summary"`
+}
+
+// DeliverabilityReportQuery are the query parameters for the deliverability report.
+type DeliverabilityReportQuery struct {
+	DomainID string `json:"domain_id,omitempty"`
+	Days     *int   `json:"days,omitempty"`
+}
+
+// DeliverabilityPeriod describes the time range covered by a deliverability report.
+type DeliverabilityPeriod struct {
+	From string `json:"from"`
+	To   string `json:"to"`
+	Days int    `json:"days"`
+}
+
+// DeliverabilityMetrics holds aggregate metrics for a deliverability report.
+type DeliverabilityMetrics struct {
+	TotalSent       int     `json:"total_sent"`
+	TotalDelivered  int     `json:"total_delivered"`
+	TotalBounced    int     `json:"total_bounced"`
+	TotalComplained int     `json:"total_complained"`
+	DeliveryRate    float64 `json:"delivery_rate"`
+	BounceRate      float64 `json:"bounce_rate"`
+	ComplaintRate   float64 `json:"complaint_rate"`
+	OpenRate        float64 `json:"open_rate"`
+	ClickRate       float64 `json:"click_rate"`
+}
+
+// DeliverabilityReputation holds reputation summary in a deliverability report.
+type DeliverabilityReputation struct {
+	Score  int    `json:"score"`
+	Rating string `json:"rating"`
+	Trend  string `json:"trend"`
+}
+
+// DeliverabilityBlocklistStatus holds blocklist summary in a deliverability report.
+type DeliverabilityBlocklistStatus struct {
+	TotalListsChecked int  `json:"total_lists_checked"`
+	ActiveListings    int  `json:"active_listings"`
+	Clean             bool `json:"clean"`
+}
+
+// DeliverabilityInboxPlacement holds inbox placement estimates.
+type DeliverabilityInboxPlacement struct {
+	InboxPct   float64 `json:"inbox_pct"`
+	SpamPct    float64 `json:"spam_pct"`
+	MissingPct float64 `json:"missing_pct"`
+}
+
+// DeliverabilityAuthentication holds authentication status for a domain.
+type DeliverabilityAuthentication struct {
+	SPF   bool `json:"spf"`
+	DKIM  bool `json:"dkim"`
+	DMARC bool `json:"dmarc"`
+	BIMI  bool `json:"bimi"`
+}
+
+// DeliverabilityReport is returned by the deliverability report endpoint.
+type DeliverabilityReport struct {
+	Period                 DeliverabilityPeriod          `json:"period"`
+	Metrics                DeliverabilityMetrics         `json:"metrics"`
+	Reputation             DeliverabilityReputation      `json:"reputation"`
+	BlocklistStatus        DeliverabilityBlocklistStatus `json:"blocklist_status"`
+	InboxPlacementEstimate DeliverabilityInboxPlacement  `json:"inbox_placement_estimate"`
+	Recommendations        []string                      `json:"recommendations"`
+	Authentication         DeliverabilityAuthentication  `json:"authentication"`
+}
+
+// ---------------------------------------------------------------------------
+// Inbound
+// ---------------------------------------------------------------------------
+
+// InboundEmailAttachment is an attachment on a received inbound email.
+type InboundEmailAttachment struct {
+	Filename    string `json:"filename"`
+	ContentType string `json:"contentType"`
+	Size        int    `json:"size"`
+	ContentID   string `json:"contentId,omitempty"`
+}
+
+// InboundEmail represents a received inbound email.
+type InboundEmail struct {
+	ID               string                   `json:"id"`
+	From             string                   `json:"from"`
+	To               []string                 `json:"to"`
+	CC               []string                 `json:"cc"`
+	Subject          *string                  `json:"subject"`
+	Text             *string                  `json:"text"`
+	HTML             *string                  `json:"html"`
+	Headers          map[string]string        `json:"headers"`
+	Attachments      []InboundEmailAttachment `json:"attachments"`
+	WebhookDelivered bool                     `json:"webhook_delivered"`
+	CreatedAt        string                   `json:"created_at"`
+}
+
+// InboundConfig is the inbound webhook forwarding configuration.
+type InboundConfig struct {
+	URL    *string `json:"url"`
+	Secret *string `json:"secret"`
+}
+
+// UpdateInboundConfigParams are the parameters for updating the inbound webhook config.
+type UpdateInboundConfigParams struct {
+	URL    *string `json:"url"`
+	Secret *string `json:"secret,omitempty"`
+}
+
+// ---------------------------------------------------------------------------
+// Notification Preferences
+// ---------------------------------------------------------------------------
+
+// NotificationPreferences represents the current user's notification preferences.
+type NotificationPreferences struct {
+	ID                string `json:"id"`
+	BounceAlerts      bool   `json:"bounce_alerts"`
+	ComplaintAlerts   bool   `json:"complaint_alerts"`
+	DeliveryFailures  bool   `json:"delivery_failures"`
+	DomainIssues      bool   `json:"domain_issues"`
+	DailySummary      bool   `json:"daily_summary"`
+	WeeklyDigest      bool   `json:"weekly_digest"`
+	MonthlyReport     bool   `json:"monthly_report"`
+	AllEvents         bool   `json:"all_events"`
+	DeliveryEvents    bool   `json:"delivery_events"`
+	EngagementEvents  bool   `json:"engagement_events"`
+	ComplianceEvents  bool   `json:"compliance_events"`
+	CreatedAt         string `json:"created_at"`
+	UpdatedAt         string `json:"updated_at"`
+}
+
+// UpdateNotificationPreferencesParams are the parameters for updating notification preferences.
+// Note: the API expects camelCase keys here, not snake_case.
+type UpdateNotificationPreferencesParams struct {
+	BounceAlerts     *bool `json:"bounceAlerts,omitempty"`
+	ComplaintAlerts  *bool `json:"complaintAlerts,omitempty"`
+	DeliveryFailures *bool `json:"deliveryFailures,omitempty"`
+	DomainIssues     *bool `json:"domainIssues,omitempty"`
+	DailySummary     *bool `json:"dailySummary,omitempty"`
+	WeeklyDigest     *bool `json:"weeklyDigest,omitempty"`
+	MonthlyReport    *bool `json:"monthlyReport,omitempty"`
+	AllEvents        *bool `json:"allEvents,omitempty"`
+	DeliveryEvents   *bool `json:"deliveryEvents,omitempty"`
+	EngagementEvents *bool `json:"engagementEvents,omitempty"`
+	ComplianceEvents *bool `json:"complianceEvents,omitempty"`
+}
+
+// ---------------------------------------------------------------------------
+// Organizations
+// ---------------------------------------------------------------------------
+
+// Organization represents the current organisation.
+type Organization struct {
+	ID        string `json:"id"`
+	Name      string `json:"name"`
+	Plan      string `json:"plan"`
+	CreatedAt string `json:"createdAt"`
+}
+
+// UpdateOrganizationParams are the parameters for updating organisation details.
+type UpdateOrganizationParams struct {
+	Name string `json:"name"`
+}
+
+// BrandingSettings are the organisation's branding settings.
+type BrandingSettings struct {
+	BrandColor             string  `json:"brand_color"`
+	BrandLogo              *string `json:"brand_logo"`
+	UnsubscribeHeading     *string `json:"unsubscribe_heading"`
+	UnsubscribeMessage     *string `json:"unsubscribe_message"`
+	UnsubscribeRedirectURL *string `json:"unsubscribe_redirect_url"`
+}
+
+// UpdateBrandingParams are the parameters for updating branding settings.
+// All fields are optional and nullable. Use pointer-to-string-pointer-style
+// helpers from the caller if you need to explicitly clear a field; the API
+// treats a missing key as "leave unchanged" and a JSON null as "clear".
+type UpdateBrandingParams struct {
+	BrandColor             *string `json:"brand_color,omitempty"`
+	BrandLogo              *string `json:"brand_logo,omitempty"`
+	UnsubscribeHeading     *string `json:"unsubscribe_heading,omitempty"`
+	UnsubscribeMessage     *string `json:"unsubscribe_message,omitempty"`
+	UnsubscribeRedirectURL *string `json:"unsubscribe_redirect_url,omitempty"`
+}
+
+// ---------------------------------------------------------------------------
+// Regions
+// ---------------------------------------------------------------------------
+
+// Region describes a single SES region available for sending.
+type Region struct {
+	RegionCode  string `json:"region_code"`
+	DisplayName string `json:"display_name"`
+	IsDefault   bool   `json:"is_default"`
+}
+
+// OrgRegionSettings are the organisation-level region settings.
+type OrgRegionSettings struct {
+	DefaultRegion *string `json:"default_region"`
+	DataResidency string  `json:"data_residency"`
+}
+
+// UpdateOrgRegionParams are the parameters for updating organisation region settings.
+type UpdateOrgRegionParams struct {
+	DefaultRegion *string `json:"default_region,omitempty"`
+	DataResidency string  `json:"data_residency,omitempty"` // "none" | "eu" | "us" | "ap"
+}
+
+// UpdateDomainRegionParams are the parameters for setting a domain's region override.
+type UpdateDomainRegionParams struct {
+	Region *string `json:"region"`
+}
+
+// RegionAnalyticsParams are the query parameters for region analytics.
+type RegionAnalyticsParams struct {
+	From string `json:"from"`
+	To   string `json:"to"`
+}
+
+// RegionAnalyticsItem is a single region's send breakdown.
+type RegionAnalyticsItem struct {
+	Region     string  `json:"region"`
+	Count      int     `json:"count"`
+	Percentage float64 `json:"percentage"`
+}
+
+// RegionAnalyticsResponse is returned by the region analytics endpoint.
+type RegionAnalyticsResponse struct {
+	Data []RegionAnalyticsItem `json:"data"`
+}
+
+// ---------------------------------------------------------------------------
+// Status
+// ---------------------------------------------------------------------------
+
+// IncidentUpdate is a single update posted to an incident.
+type IncidentUpdate struct {
+	ID        string `json:"id"`
+	Status    string `json:"status"`
+	Message   string `json:"message"`
+	CreatedAt string `json:"created_at"`
+}
+
+// AffectedComponent identifies a component affected by an incident.
+type AffectedComponent struct {
+	ID   string `json:"id"`
+	Name string `json:"name"`
+	Slug string `json:"slug"`
+}
+
+// Incident represents a status-page incident.
+type Incident struct {
+	ID                 string              `json:"id"`
+	Title              string              `json:"title"`
+	Status             string              `json:"status"`
+	Impact             string              `json:"impact"`
+	StartsAt           *string             `json:"starts_at"`
+	EndsAt             *string             `json:"ends_at"`
+	ResolvedAt         *string             `json:"resolved_at"`
+	CreatedAt          string              `json:"created_at"`
+	UpdatedAt          string              `json:"updated_at"`
+	Updates            []IncidentUpdate    `json:"updates"`
+	AffectedComponents []AffectedComponent `json:"affected_components"`
+}
+
+// StatusComponent describes a single component on the status page.
+type StatusComponent struct {
+	ID          string  `json:"id"`
+	Name        string  `json:"name"`
+	Description *string `json:"description"`
+	Group       *string `json:"group"`
+	Slug        string  `json:"slug"`
+	Status      string  `json:"status"`
+	Uptime90d   float64 `json:"uptime_90d"`
+	SLATarget   float64 `json:"sla_target"`
+	SLAMet      bool    `json:"sla_met"`
+}
+
+// SLASummary summarises SLA compliance.
+type SLASummary struct {
+	Target         float64 `json:"target"`
+	CurrentUptime  float64 `json:"current_uptime"`
+	SLAMet         bool    `json:"sla_met"`
+}
+
+// SystemStatus is the current operational status of Sendry.
+type SystemStatus struct {
+	Status          string            `json:"status"`
+	Components      []StatusComponent `json:"components"`
+	ActiveIncidents []Incident        `json:"active_incidents"`
+	SLASummary      SLASummary        `json:"sla_summary"`
+}
+
+// LatencyHourBucket is an hourly latency rollup.
+type LatencyHourBucket struct {
+	Hour         string   `json:"hour"`
+	P50MS        *float64 `json:"p50_ms"`
+	P95MS        *float64 `json:"p95_ms"`
+	P99MS        *float64 `json:"p99_ms"`
+	SampleCount  int      `json:"sample_count"`
+	TargetMetPct float64  `json:"target_met_pct"`
+}
+
+// LatencyStats holds latency rollups for a component over a window.
+type LatencyStats struct {
+	Component    string              `json:"component"`
+	TargetMS     float64             `json:"target_ms"`
+	CurrentP50MS *float64            `json:"current_p50_ms"`
+	TargetMet    bool                `json:"target_met"`
+	Hourly       []LatencyHourBucket `json:"hourly"`
+}
+
+// GetLatencyParams are the query parameters for the latency endpoint.
+type GetLatencyParams struct {
+	Component string `json:"component,omitempty"`
+	Hours     *int   `json:"hours,omitempty"`
+}
+
+// ---------------------------------------------------------------------------
+// Test Emails
+// ---------------------------------------------------------------------------
+
+// TestEmailSummary is a summary of a test-mode email for list responses.
+type TestEmailSummary struct {
+	ID          string   `json:"id"`
+	From        string   `json:"from"`
+	To          []string `json:"to"`
+	Subject     string   `json:"subject"`
+	MessageType string   `json:"message_type"`
+	CreatedAt   string   `json:"created_at"`
+}
+
+// TestEmail is the full details of a captured test-mode email.
+type TestEmail struct {
+	ID          string   `json:"id"`
+	From        string   `json:"from"`
+	To          []string `json:"to"`
+	CC          []string `json:"cc"`
+	Subject     string   `json:"subject"`
+	HTML        *string  `json:"html"`
+	Text        *string  `json:"text"`
+	MessageType string   `json:"message_type"`
+	CreatedAt   string   `json:"created_at"`
+}
+
+// ---------------------------------------------------------------------------
+// Automations
+// ---------------------------------------------------------------------------
+
+// AutomationStatus represents the lifecycle state of an automation.
+type AutomationStatus string
+
+const (
+	AutomationStatusDraft    AutomationStatus = "draft"
+	AutomationStatusActive   AutomationStatus = "active"
+	AutomationStatusPaused   AutomationStatus = "paused"
+	AutomationStatusArchived AutomationStatus = "archived"
+)
+
+// AutomationTriggerType describes how an automation is triggered.
+type AutomationTriggerType string
+
+const (
+	AutomationTriggerEvent                  AutomationTriggerType = "event"
+	AutomationTriggerContactAddedToSegment  AutomationTriggerType = "contact_added_to_segment"
+	AutomationTriggerSchedule               AutomationTriggerType = "schedule"
+	AutomationTriggerManual                 AutomationTriggerType = "manual"
+)
+
+// AutomationReentryPolicy describes how a contact may re-enter an automation.
+type AutomationReentryPolicy string
+
+const (
+	AutomationReentryOncePerContact AutomationReentryPolicy = "once_per_contact"
+	AutomationReentryCooldown       AutomationReentryPolicy = "cooldown"
+	AutomationReentryAlways         AutomationReentryPolicy = "always"
+)
+
+// Automation represents an automation workflow definition.
+type Automation struct {
+	ID                     string                 `json:"id"`
+	Name                   string                 `json:"name"`
+	Description            *string                `json:"description"`
+	Status                 AutomationStatus       `json:"status"`
+	TriggerType            AutomationTriggerType  `json:"trigger_type"`
+	TriggerConfig          map[string]any         `json:"trigger_config"`
+	EntrySegmentID         *string                `json:"entry_segment_id"`
+	ReentryPolicy          string                 `json:"reentry_policy"`
+	ReentryCooldownSeconds *int                   `json:"reentry_cooldown_seconds"`
+	TotalRuns              int                    `json:"total_runs"`
+	ActiveRuns             int                    `json:"active_runs"`
+	CompletedRuns          int                    `json:"completed_runs"`
+	FailedRuns             int                    `json:"failed_runs"`
+	CreatedAt              string                 `json:"created_at"`
+	UpdatedAt              string                 `json:"updated_at"`
+}
+
+// AutomationStepType identifies an automation step's kind.
+type AutomationStepType string
+
+const (
+	AutomationStepSendEmail AutomationStepType = "send_email"
+	AutomationStepWait      AutomationStepType = "wait"
+	AutomationStepBranch    AutomationStepType = "branch"
+	AutomationStepABSplit   AutomationStepType = "ab_split"
+)
+
+// AutomationStep represents a single step within an automation.
+type AutomationStep struct {
+	ID            string             `json:"id"`
+	AutomationID  string             `json:"automation_id"`
+	ParentStepID  *string            `json:"parent_step_id"`
+	BranchLabel   *string            `json:"branch_label"`
+	Position      int                `json:"position"`
+	Type          AutomationStepType `json:"type"`
+	Config        map[string]any     `json:"config"`
+	CreatedAt     string             `json:"created_at"`
+	UpdatedAt     string             `json:"updated_at"`
+}
+
+// AutomationRunStatus is the lifecycle status of a single run.
+type AutomationRunStatus string
+
+const (
+	AutomationRunPending    AutomationRunStatus = "pending"
+	AutomationRunInProgress AutomationRunStatus = "in_progress"
+	AutomationRunCompleted  AutomationRunStatus = "completed"
+	AutomationRunFailed     AutomationRunStatus = "failed"
+	AutomationRunCancelled  AutomationRunStatus = "cancelled"
+)
+
+// AutomationRun represents a single contact's execution of an automation.
+type AutomationRun struct {
+	ID              string              `json:"id"`
+	AutomationID    string              `json:"automation_id"`
+	ContactID       *string             `json:"contact_id"`
+	ContactEmail    string              `json:"contact_email"`
+	TriggerEventID  *string             `json:"trigger_event_id"`
+	Status          AutomationRunStatus `json:"status"`
+	CurrentStepID   *string             `json:"current_step_id"`
+	Context         map[string]any      `json:"context"`
+	StartedAt       string              `json:"started_at"`
+	CompletedAt     *string             `json:"completed_at"`
+	FailedAt        *string             `json:"failed_at"`
+	FailureReason   *string             `json:"failure_reason"`
+	CreatedAt       string              `json:"created_at"`
+	UpdatedAt       string              `json:"updated_at"`
+}
+
+// AutomationRunStepStatus is the lifecycle status of a single run step.
+type AutomationRunStepStatus string
+
+const (
+	AutomationRunStepPending    AutomationRunStepStatus = "pending"
+	AutomationRunStepInProgress AutomationRunStepStatus = "in_progress"
+	AutomationRunStepCompleted  AutomationRunStepStatus = "completed"
+	AutomationRunStepSkipped    AutomationRunStepStatus = "skipped"
+	AutomationRunStepFailed     AutomationRunStepStatus = "failed"
+)
+
+// AutomationRunStep is a single step's execution record within a run.
+type AutomationRunStep struct {
+	ID           string                  `json:"id"`
+	RunID        string                  `json:"run_id"`
+	StepID       string                  `json:"step_id"`
+	Status       AutomationRunStepStatus `json:"status"`
+	EmailID      *string                 `json:"email_id"`
+	BranchTaken  *string                 `json:"branch_taken"`
+	ScheduledFor *string                 `json:"scheduled_for"`
+	StartedAt    *string                 `json:"started_at"`
+	CompletedAt  *string                 `json:"completed_at"`
+	Error        *string                 `json:"error"`
+	CreatedAt    string                  `json:"created_at"`
+}
+
+// ListAutomationsParams are the query parameters for listing automations.
+type ListAutomationsParams struct {
+	PaginationParams
+	Status AutomationStatus `json:"status,omitempty"`
+}
+
+// CreateAutomationParams are the parameters for creating an automation.
+type CreateAutomationParams struct {
+	Name                   string                  `json:"name"`
+	Description            string                  `json:"description,omitempty"`
+	TriggerType            AutomationTriggerType   `json:"trigger_type"`
+	TriggerConfig          map[string]any          `json:"trigger_config,omitempty"`
+	EntrySegmentID         string                  `json:"entry_segment_id,omitempty"`
+	ReentryPolicy          AutomationReentryPolicy `json:"reentry_policy,omitempty"`
+	ReentryCooldownSeconds *int                    `json:"reentry_cooldown_seconds,omitempty"`
+}
+
+// UpdateAutomationParams are the parameters for patching an automation.
+type UpdateAutomationParams struct {
+	Name                   string                  `json:"name,omitempty"`
+	Description            *string                 `json:"description,omitempty"`
+	TriggerConfig          map[string]any          `json:"trigger_config,omitempty"`
+	EntrySegmentID         *string                 `json:"entry_segment_id,omitempty"`
+	ReentryPolicy          AutomationReentryPolicy `json:"reentry_policy,omitempty"`
+	ReentryCooldownSeconds *int                    `json:"reentry_cooldown_seconds,omitempty"`
+}
+
+// AddAutomationStepParams are the parameters for adding a step to an automation.
+type AddAutomationStepParams struct {
+	ParentStepID *string        `json:"parent_step_id,omitempty"`
+	BranchLabel  *string        `json:"branch_label,omitempty"`
+	Position     *int           `json:"position,omitempty"`
+	Config       map[string]any `json:"config"`
+}
+
+// UpdateAutomationStepParams are the parameters for patching an automation step.
+type UpdateAutomationStepParams struct {
+	ParentStepID *string        `json:"parent_step_id,omitempty"`
+	BranchLabel  *string        `json:"branch_label,omitempty"`
+	Position     *int           `json:"position,omitempty"`
+	Config       map[string]any `json:"config,omitempty"`
+}
+
+// ListAutomationRunsParams are the query parameters for listing automation runs.
+type ListAutomationRunsParams struct {
+	PaginationParams
+	Status string `json:"status,omitempty"`
+}
+
+// CreateAutomationRunParams are the parameters for creating a manual automation run.
+type CreateAutomationRunParams struct {
+	ContactID    string         `json:"contact_id,omitempty"`
+	ContactEmail string         `json:"contact_email,omitempty"`
+	Context      map[string]any `json:"context,omitempty"`
+}
+
+// SendEmailStepConfig builds a map[string]any config for a send_email step.
+type SendEmailStepConfig struct {
+	TemplateID  string            `json:"template_id,omitempty"`
+	From        string            `json:"from"`
+	ReplyTo     string            `json:"reply_to,omitempty"`
+	Subject     string            `json:"subject,omitempty"`
+	HTML        string            `json:"html,omitempty"`
+	Text        string            `json:"text,omitempty"`
+	MessageType string            `json:"message_type,omitempty"` // "transactional" | "marketing"
+	TopicID     string            `json:"topic_id,omitempty"`
+	Variables   map[string]string `json:"variables,omitempty"`
+}
+
+// ToConfig converts the typed step config to a generic map suitable for the
+// automation step config field. The "type" discriminator is included.
+func (s SendEmailStepConfig) ToConfig() map[string]any {
+	m := map[string]any{"type": "send_email", "from": s.From}
+	if s.TemplateID != "" {
+		m["template_id"] = s.TemplateID
+	}
+	if s.ReplyTo != "" {
+		m["reply_to"] = s.ReplyTo
+	}
+	if s.Subject != "" {
+		m["subject"] = s.Subject
+	}
+	if s.HTML != "" {
+		m["html"] = s.HTML
+	}
+	if s.Text != "" {
+		m["text"] = s.Text
+	}
+	if s.MessageType != "" {
+		m["message_type"] = s.MessageType
+	}
+	if s.TopicID != "" {
+		m["topic_id"] = s.TopicID
+	}
+	if len(s.Variables) > 0 {
+		m["variables"] = s.Variables
+	}
+	return m
+}
+
+// WaitStepConfig builds a map[string]any config for a wait step.
+type WaitStepConfig struct {
+	DurationSeconds int `json:"duration_seconds"`
+}
+
+// ToConfig converts the typed step config to a generic map.
+func (s WaitStepConfig) ToConfig() map[string]any {
+	return map[string]any{"type": "wait", "duration_seconds": s.DurationSeconds}
+}
+
+// BranchStepCondition is the condition payload for a branch step.
+type BranchStepCondition struct {
+	Op            string `json:"op"`
+	Property      string `json:"property,omitempty"`
+	Value         any    `json:"value,omitempty"`
+	SegmentID     string `json:"segment_id,omitempty"`
+	EventName     string `json:"event_name,omitempty"`
+	WithinSeconds *int   `json:"within_seconds,omitempty"`
+}
+
+// BranchStepConfig builds a map[string]any config for a branch step.
+type BranchStepConfig struct {
+	Condition BranchStepCondition `json:"condition"`
+}
+
+// ToConfig converts the typed step config to a generic map.
+func (s BranchStepConfig) ToConfig() map[string]any {
+	cond := map[string]any{"op": s.Condition.Op}
+	if s.Condition.Property != "" {
+		cond["property"] = s.Condition.Property
+	}
+	if s.Condition.Value != nil {
+		cond["value"] = s.Condition.Value
+	}
+	if s.Condition.SegmentID != "" {
+		cond["segment_id"] = s.Condition.SegmentID
+	}
+	if s.Condition.EventName != "" {
+		cond["event_name"] = s.Condition.EventName
+	}
+	if s.Condition.WithinSeconds != nil {
+		cond["within_seconds"] = *s.Condition.WithinSeconds
+	}
+	return map[string]any{"type": "branch", "condition": cond}
+}
+
+// ABSplitStepConfig builds a map[string]any config for an A/B split step.
+type ABSplitStepConfig struct {
+	A    int    `json:"a"`
+	B    int    `json:"b"`
+	Seed string `json:"seed,omitempty"`
+}
+
+// ToConfig converts the typed step config to a generic map.
+func (s ABSplitStepConfig) ToConfig() map[string]any {
+	m := map[string]any{
+		"type":  "ab_split",
+		"split": map[string]any{"a": s.A, "b": s.B},
+	}
+	if s.Seed != "" {
+		m["seed"] = s.Seed
+	}
+	return m
+}
+
+// ---------------------------------------------------------------------------
+// Events
+// ---------------------------------------------------------------------------
+
+// IngestedEvent represents an event ingested into Sendry.
+type IngestedEvent struct {
+	ID            string         `json:"id"`
+	ExternalID    *string        `json:"external_id"`
+	Name          string         `json:"name"`
+	ContactEmail  *string        `json:"contact_email"`
+	ContactID     *string        `json:"contact_id"`
+	Payload       map[string]any `json:"payload"`
+	ReceivedAt    string         `json:"received_at"`
+	ProcessedAt   *string        `json:"processed_at"`
+	TriggeredRuns int            `json:"triggered_runs"`
+	Deduped       bool           `json:"deduped,omitempty"`
+}
+
+// IngestEventParams are the parameters for ingesting an event.
+type IngestEventParams struct {
+	Name         string         `json:"name"`
+	EventID      string         `json:"event_id,omitempty"`
+	ContactEmail string         `json:"contact_email,omitempty"`
+	ContactID    string         `json:"contact_id,omitempty"`
+	Payload      map[string]any `json:"payload,omitempty"`
+}
+
+// ListEventsParams are the query parameters for listing events.
+type ListEventsParams struct {
+	PaginationParams
+	Name string `json:"name,omitempty"`
+}

@@ -15,7 +15,7 @@ import (
 const (
 	defaultBaseURL = "https://api.sendry.online"
 	defaultTimeout = 30 * time.Second
-	sdkVersion     = "0.1.0"
+	sdkVersion     = "0.2.0"
 	userAgent      = "sendry-go/" + sdkVersion
 )
 
@@ -60,19 +60,29 @@ type Client struct {
 	retry      retryConfig
 
 	// Resource accessors
-	Emails       *EmailsResource
-	Domains      *DomainsResource
-	Templates    *TemplatesResource
-	APIKeys      *APIKeysResource
-	Webhooks     *WebhooksResource
-	Analytics    *AnalyticsResource
-	Suppression  *SuppressionResource
-	Unsubscribes *UnsubscribesResource
-	Contacts     *ContactsResource
-	Audiences    *AudiencesResource
-	Campaigns    *CampaignsResource
-	Billing      *BillingResource
-	Team         *TeamResource
+	Emails                  *EmailsResource
+	Domains                 *DomainsResource
+	Templates               *TemplatesResource
+	APIKeys                 *APIKeysResource
+	Webhooks                *WebhooksResource
+	Analytics               *AnalyticsResource
+	Suppression             *SuppressionResource
+	Unsubscribes            *UnsubscribesResource
+	Contacts                *ContactsResource
+	Audiences               *AudiencesResource
+	Campaigns               *CampaignsResource
+	Billing                 *BillingResource
+	Team                    *TeamResource
+	DedicatedIps            *DedicatedIpsResource
+	Deliverability          *DeliverabilityResource
+	Inbound                 *InboundResource
+	NotificationPreferences *NotificationPreferencesResource
+	Organizations           *OrganizationsResource
+	Regions                 *RegionsResource
+	Status                  *StatusResource
+	TestEmails              *TestEmailsResource
+	Automations             *AutomationsResource
+	Events                  *EventsResource
 }
 
 // NewClient creates a new Sendry API client authenticated with the given API key.
@@ -118,6 +128,16 @@ func NewClient(apiKey string, opts ...Option) *Client {
 	c.Campaigns = &CampaignsResource{client: c}
 	c.Billing = &BillingResource{client: c}
 	c.Team = &TeamResource{client: c}
+	c.DedicatedIps = &DedicatedIpsResource{client: c}
+	c.Deliverability = &DeliverabilityResource{client: c}
+	c.Inbound = &InboundResource{client: c}
+	c.NotificationPreferences = &NotificationPreferencesResource{client: c}
+	c.Organizations = &OrganizationsResource{client: c}
+	c.Regions = &RegionsResource{client: c}
+	c.Status = &StatusResource{client: c}
+	c.TestEmails = &TestEmailsResource{client: c}
+	c.Automations = &AutomationsResource{client: c}
+	c.Events = &EventsResource{client: c}
 
 	return c
 }
