@@ -1,6 +1,6 @@
-// Package sendr provides a Go client for the Sendr email API.
+// Package sendry provides a Go client for the Sendry email API.
 //
-// See https://api.sendr.dev for the API reference.
+// See https://api.sendry.online for the API reference.
 package sendry
 
 // ---------------------------------------------------------------------------
@@ -179,7 +179,7 @@ type DnsRecord struct {
 	Verified bool    `json:"verified"`
 }
 
-// Domain represents a sending domain registered in Sendr.
+// Domain represents a sending domain registered in Sendry.
 type Domain struct {
 	ID         string      `json:"id"`
 	Name       string      `json:"name"`
@@ -262,7 +262,7 @@ type UpdateTemplateParams struct {
 	Variables map[string]TemplateVariable `json:"variables,omitempty"`
 }
 
-// Template represents an email template stored in Sendr.
+// Template represents an email template stored in Sendry.
 type Template struct {
 	ID        string                      `json:"id"`
 	Name      string                      `json:"name"`
@@ -677,7 +677,7 @@ type UpdateContactParams struct {
 	Unsubscribed *bool          `json:"unsubscribed,omitempty"`
 }
 
-// Contact represents a contact stored in Sendr.
+// Contact represents a contact stored in Sendry.
 type Contact struct {
 	ID           string  `json:"id"`
 	Email        string  `json:"email"`
@@ -734,7 +734,7 @@ type UpdateAudienceParams struct {
 	Description *string `json:"description"`
 }
 
-// Audience represents a contact list (audience) in Sendr.
+// Audience represents a contact list (audience) in Sendry.
 type Audience struct {
 	ID          string `json:"id"`
 	Name        string `json:"name"`

@@ -13,10 +13,10 @@ import (
 )
 
 const (
-	defaultBaseURL = "https://api.sendr.dev"
+	defaultBaseURL = "https://api.sendry.online"
 	defaultTimeout = 30 * time.Second
 	sdkVersion     = "0.1.0"
-	userAgent      = "sendr-go/" + sdkVersion
+	userAgent      = "sendry-go/" + sdkVersion
 )
 
 // Option is a functional option for configuring a Client.
@@ -51,7 +51,7 @@ func WithMaxRetries(n int) Option {
 	}
 }
 
-// Client is the Sendr API client. Create one with NewClient and call methods on
+// Client is the Sendry API client. Create one with NewClient and call methods on
 // the resource fields (e.g. client.Emails.Send).
 type Client struct {
 	apiKey     string
@@ -75,18 +75,18 @@ type Client struct {
 	Team         *TeamResource
 }
 
-// NewClient creates a new Sendr API client authenticated with the given API key.
+// NewClient creates a new Sendry API client authenticated with the given API key.
 // Pass functional options to customise the base URL, HTTP client, or timeout.
 //
 // Example:
 //
-//	client := sendr.NewClient("sn_live_abc123")
+//	client := sendry.NewClient("sn_live_abc123")
 //
 //	// With options
-//	client := sendr.NewClient(
+//	client := sendry.NewClient(
 //	    "sn_live_abc123",
-//	    sendr.WithTimeout(10*time.Second),
-//	    sendr.WithBaseURL("https://api.sendr.dev"),
+//	    sendry.WithTimeout(10*time.Second),
+//	    sendry.WithBaseURL("https://api.sendry.online"),
 //	)
 func NewClient(apiKey string, opts ...Option) *Client {
 	c := &Client{
@@ -180,7 +180,7 @@ func (c *Client) doOnce(ctx context.Context, method, path string, query url.Valu
 	if reqBody != nil {
 		data, err := json.Marshal(reqBody)
 		if err != nil {
-			return fmt.Errorf("sendr: marshal request body: %w", err)
+			return fmt.Errorf("sendry: marshal request body: %w", err)
 		}
 		bodyReader = bytes.NewReader(data)
 	}
@@ -211,7 +211,7 @@ func (c *Client) doOnce(ctx context.Context, method, path string, query url.Valu
 	if resp.StatusCode >= 200 && resp.StatusCode < 300 {
 		if respBody != nil {
 			if err := json.NewDecoder(resp.Body).Decode(respBody); err != nil {
-				return fmt.Errorf("sendr: decode response: %w", err)
+				return fmt.Errorf("sendry: decode response: %w", err)
 			}
 		}
 		return nil
@@ -230,7 +230,7 @@ func (c *Client) doOnce(ctx context.Context, method, path string, query url.Valu
 		msg = resp.Status
 	}
 
-	base := &Error{
+	base := &APIError{
 		StatusCode: resp.StatusCode,
 		Code:       code,
 		Message:    msg,
@@ -238,11 +238,11 @@ func (c *Client) doOnce(ctx context.Context, method, path string, query url.Valu
 
 	switch resp.StatusCode {
 	case http.StatusUnauthorized:
-		return &AuthenticationError{Error: base}
+		return &AuthenticationError{APIError: base}
 	case http.StatusNotFound:
-		return &NotFoundError{Error: base}
+		return &NotFoundError{APIError: base}
 	case http.StatusUnprocessableEntity:
-		return &ValidationError{Error: base, Details: errBody.Error.Details}
+		return &ValidationError{APIError: base, Details: errBody.Error.Details}
 	case http.StatusTooManyRequests:
 		retryAfter := 0
 		if raw := resp.Header.Get("Retry-After"); raw != "" {
@@ -250,7 +250,7 @@ func (c *Client) doOnce(ctx context.Context, method, path string, query url.Valu
 				retryAfter = n
 			}
 		}
-		return &RateLimitError{Error: base, RetryAfter: retryAfter}
+		return &RateLimitError{APIError: base, RetryAfter: retryAfter}
 	}
 
 	return base

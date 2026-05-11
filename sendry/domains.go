@@ -16,7 +16,7 @@ type DomainsResource struct {
 //
 // Example:
 //
-//	domain, err := client.Domains.Create(ctx, sendr.CreateDomainParams{Name: "example.com"})
+//	domain, err := client.Domains.Create(ctx, sendry.CreateDomainParams{Name: "example.com"})
 //	// domain.DnsRecords contains records to add to your DNS provider
 func (r *DomainsResource) Create(ctx context.Context, params CreateDomainParams) (*Domain, error) {
 	var out Domain
@@ -94,7 +94,7 @@ func (r *DomainsResource) Remove(ctx context.Context, id string) (*DeleteRespons
 //
 // Example:
 //
-//	bimi, err := client.Domains.ConfigureBimi(ctx, "dom_abc123", sendr.ConfigureBimiParams{
+//	bimi, err := client.Domains.ConfigureBimi(ctx, "dom_abc123", sendry.ConfigureBimiParams{
 //	    LogoURL: "https://example.com/logo.svg",
 //	})
 func (r *DomainsResource) ConfigureBimi(ctx context.Context, domainID string, params ConfigureBimiParams) (*BimiConfig, error) {

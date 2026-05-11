@@ -16,7 +16,7 @@ type EmailsResource struct {
 //
 // Example:
 //
-//	resp, err := client.Emails.Send(ctx, sendr.SendEmailParams{
+//	resp, err := client.Emails.Send(ctx, sendry.SendEmailParams{
 //	    From:    "hello@example.com",
 //	    To:      "user@example.com",
 //	    Subject: "Hello",
@@ -47,8 +47,8 @@ func (r *EmailsResource) Get(ctx context.Context, id string) (*Email, error) {
 //
 // Example:
 //
-//	page, err := client.Emails.List(ctx, &sendr.ListEmailsParams{
-//	    PaginationParams: sendr.PaginationParams{Limit: sendr.IntPtr(25)},
+//	page, err := client.Emails.List(ctx, &sendry.ListEmailsParams{
+//	    PaginationParams: sendry.PaginationParams{Limit: sendry.IntPtr(25)},
 //	})
 func (r *EmailsResource) List(ctx context.Context, params *ListEmailsParams) (*PaginatedResponse[Email], error) {
 	q := url.Values{}
@@ -74,9 +74,9 @@ func (r *EmailsResource) List(ctx context.Context, params *ListEmailsParams) (*P
 //
 // Example:
 //
-//	result, err := client.Emails.SendBatch(ctx, sendr.SendBatchParams{
+//	result, err := client.Emails.SendBatch(ctx, sendry.SendBatchParams{
 //	    From: "hello@example.com",
-//	    Emails: []sendr.BatchEmailItem{
+//	    Emails: []sendry.BatchEmailItem{
 //	        {To: "a@example.com", Subject: "Hi A", HTML: "<p>A</p>"},
 //	    },
 //	})
@@ -92,7 +92,7 @@ func (r *EmailsResource) SendBatch(ctx context.Context, params SendBatchParams) 
 //
 // Example:
 //
-//	resp, err := client.Emails.SendMarketing(ctx, sendr.SendMarketingEmailParams{
+//	resp, err := client.Emails.SendMarketing(ctx, sendry.SendMarketingEmailParams{
 //	    From:           "news@example.com",
 //	    To:             "subscriber@example.com",
 //	    Subject:        "Newsletter",

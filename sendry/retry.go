@@ -26,10 +26,10 @@ func shouldRetry(err error) bool {
 	if _, ok := err.(*NetworkError); ok {
 		return true
 	}
-	if apiErr, ok := err.(*Error); ok {
+	if apiErr, ok := err.(*APIError); ok {
 		return apiErr.StatusCode >= 500
 	}
-	// Subtypes embed *Error — check them explicitly.
+	// Subtypes embed *APIError — check them explicitly.
 	if authErr, ok := err.(*AuthenticationError); ok {
 		return authErr.StatusCode >= 500
 	}

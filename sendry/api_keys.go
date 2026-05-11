@@ -17,9 +17,9 @@ type APIKeysResource struct {
 //
 // Example:
 //
-//	created, err := client.APIKeys.Create(ctx, sendr.CreateAPIKeyParams{
+//	created, err := client.APIKeys.Create(ctx, sendry.CreateAPIKeyParams{
 //	    Name:  "Production Key",
-//	    Scope: sendr.APIKeyScopeSendingAccess,
+//	    Scope: sendry.APIKeyScopeSendingAccess,
 //	})
 //	// Store created.Key securely — it cannot be retrieved again.
 func (r *APIKeysResource) Create(ctx context.Context, params CreateAPIKeyParams) (*APIKeyCreated, error) {

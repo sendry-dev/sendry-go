@@ -40,7 +40,7 @@ func (r *BillingResource) GetUsage(ctx context.Context) (*BillingUsage, error) {
 //
 // Example:
 //
-//	session, err := client.Billing.CreateCheckout(ctx, sendr.CreateCheckoutParams{
+//	session, err := client.Billing.CreateCheckout(ctx, sendry.CreateCheckoutParams{
 //	    Plan:          "pro",
 //	    BillingPeriod: "annual",
 //	    SuccessURL:    "https://app.acme.com/billing?success=1",
@@ -59,7 +59,7 @@ func (r *BillingResource) CreateCheckout(ctx context.Context, params CreateCheck
 //
 // Example:
 //
-//	portal, err := client.Billing.CreatePortal(ctx, &sendr.CreatePortalParams{
+//	portal, err := client.Billing.CreatePortal(ctx, &sendry.CreatePortalParams{
 //	    ReturnURL: "https://app.acme.com/billing",
 //	})
 //	// Redirect user to portal.URL

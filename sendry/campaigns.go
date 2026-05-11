@@ -16,7 +16,7 @@ type CampaignsResource struct {
 //
 // Example:
 //
-//	campaign, err := client.Campaigns.Create(ctx, sendr.CreateCampaignParams{
+//	campaign, err := client.Campaigns.Create(ctx, sendry.CreateCampaignParams{
 //	    Name:       "March Newsletter",
 //	    Subject:    "What's new in March",
 //	    From:       "Acme <hello@acme.com>",
@@ -35,7 +35,7 @@ func (r *CampaignsResource) Create(ctx context.Context, params CreateCampaignPar
 //
 // Example:
 //
-//	page, err := client.Campaigns.List(ctx, &sendr.ListCampaignsParams{Status: "draft"})
+//	page, err := client.Campaigns.List(ctx, &sendry.ListCampaignsParams{Status: "draft"})
 func (r *CampaignsResource) List(ctx context.Context, params *ListCampaignsParams) (*PaginatedResponse[CampaignListItem], error) {
 	q := url.Values{}
 	if params != nil {
@@ -74,7 +74,7 @@ func (r *CampaignsResource) Get(ctx context.Context, id string) (*Campaign, erro
 //
 // Example:
 //
-//	updated, err := client.Campaigns.Update(ctx, "cp_abc123", sendr.UpdateCampaignParams{
+//	updated, err := client.Campaigns.Update(ctx, "cp_abc123", sendry.UpdateCampaignParams{
 //	    Subject: "Updated subject line",
 //	})
 func (r *CampaignsResource) Update(ctx context.Context, id string, params UpdateCampaignParams) (*Campaign, error) {
@@ -102,7 +102,7 @@ func (r *CampaignsResource) Remove(ctx context.Context, id string) (*DeleteRespo
 //
 // Example:
 //
-//	result, err := client.Campaigns.Schedule(ctx, "cp_abc123", sendr.ScheduleCampaignParams{
+//	result, err := client.Campaigns.Schedule(ctx, "cp_abc123", sendry.ScheduleCampaignParams{
 //	    ScheduledAt: "2026-03-15T10:00:00Z",
 //	})
 func (r *CampaignsResource) Schedule(ctx context.Context, id string, params ScheduleCampaignParams) (*CampaignActionResponse, error) {

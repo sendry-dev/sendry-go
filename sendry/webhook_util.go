@@ -19,9 +19,9 @@ import (
 //
 // Example:
 //
-//	valid := sendr.VerifyWebhookSignature(
+//	valid := sendry.VerifyWebhookSignature(
 //	    string(body),
-//	    r.Header.Get("Sendr-Signature"),
+//	    r.Header.Get("Sendry-Signature"),
 //	    "whsec_your_signing_secret",
 //	)
 //	if !valid {

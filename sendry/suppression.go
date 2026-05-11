@@ -38,9 +38,9 @@ func (r *SuppressionResource) List(ctx context.Context, params *PaginationParams
 //
 // Example:
 //
-//	entry, err := client.Suppression.Add(ctx, sendr.AddSuppressionParams{
+//	entry, err := client.Suppression.Add(ctx, sendry.AddSuppressionParams{
 //	    Email:  "bounced@example.com",
-//	    Reason: sendr.SuppressionReasonHardBounce,
+//	    Reason: sendry.SuppressionReasonHardBounce,
 //	})
 func (r *SuppressionResource) Add(ctx context.Context, params AddSuppressionParams) (*SuppressionEntry, error) {
 	var out SuppressionEntry

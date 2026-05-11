@@ -16,7 +16,7 @@ type WebhooksResource struct {
 //
 // Example:
 //
-//	hook, err := client.Webhooks.Create(ctx, sendr.CreateWebhookParams{
+//	hook, err := client.Webhooks.Create(ctx, sendry.CreateWebhookParams{
 //	    URL:    "https://example.com/webhook",
 //	    Events: []string{"email.delivered", "email.bounced"},
 //	})
@@ -68,8 +68,8 @@ func (r *WebhooksResource) Get(ctx context.Context, id string) (*Webhook, error)
 //
 // Example:
 //
-//	updated, err := client.Webhooks.Update(ctx, "wh_abc123", sendr.UpdateWebhookParams{
-//	    Active: sendr.BoolPtr(false),
+//	updated, err := client.Webhooks.Update(ctx, "wh_abc123", sendry.UpdateWebhookParams{
+//	    Active: sendry.BoolPtr(false),
 //	})
 func (r *WebhooksResource) Update(ctx context.Context, id string, params UpdateWebhookParams) (*Webhook, error) {
 	var out Webhook

@@ -16,7 +16,7 @@ type ContactsResource struct {
 //
 // Example:
 //
-//	contact, err := client.Contacts.Create(ctx, sendr.CreateContactParams{
+//	contact, err := client.Contacts.Create(ctx, sendry.CreateContactParams{
 //	    Email:     "jane@example.com",
 //	    FirstName: "Jane",
 //	    LastName:  "Doe",
@@ -33,7 +33,7 @@ func (r *ContactsResource) Create(ctx context.Context, params CreateContactParam
 //
 // Example:
 //
-//	page, err := client.Contacts.List(ctx, &sendr.ListContactsParams{
+//	page, err := client.Contacts.List(ctx, &sendry.ListContactsParams{
 //	    AudienceID: "aud_abc123",
 //	})
 func (r *ContactsResource) List(ctx context.Context, params *ListContactsParams) (*PaginatedResponse[Contact], error) {
@@ -76,8 +76,8 @@ func (r *ContactsResource) Get(ctx context.Context, id string) (*Contact, error)
 //
 // Example:
 //
-//	updated, err := client.Contacts.Update(ctx, "ct_abc123", sendr.UpdateContactParams{
-//	    Unsubscribed: sendr.BoolPtr(true),
+//	updated, err := client.Contacts.Update(ctx, "ct_abc123", sendry.UpdateContactParams{
+//	    Unsubscribed: sendry.BoolPtr(true),
 //	})
 func (r *ContactsResource) Update(ctx context.Context, id string, params UpdateContactParams) (*Contact, error) {
 	var out Contact
@@ -105,8 +105,8 @@ func (r *ContactsResource) Remove(ctx context.Context, id string) (*DeleteRespon
 //
 // Example:
 //
-//	result, err := client.Contacts.BulkImport(ctx, sendr.BulkImportContactsParams{
-//	    Contacts: []sendr.BulkImportContactItem{
+//	result, err := client.Contacts.BulkImport(ctx, sendry.BulkImportContactsParams{
+//	    Contacts: []sendry.BulkImportContactItem{
 //	        {Email: "alice@example.com", FirstName: "Alice"},
 //	        {Email: "bob@example.com", FirstName: "Bob"},
 //	    },

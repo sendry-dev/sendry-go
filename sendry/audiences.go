@@ -16,7 +16,7 @@ type AudiencesResource struct {
 //
 // Example:
 //
-//	audience, err := client.Audiences.Create(ctx, sendr.CreateAudienceParams{
+//	audience, err := client.Audiences.Create(ctx, sendry.CreateAudienceParams{
 //	    Name:        "Newsletter Subscribers",
 //	    Description: "Weekly newsletter list",
 //	})
@@ -68,7 +68,7 @@ func (r *AudiencesResource) Get(ctx context.Context, id string) (*Audience, erro
 //
 // Example:
 //
-//	updated, err := client.Audiences.Update(ctx, "aud_abc123", sendr.UpdateAudienceParams{
+//	updated, err := client.Audiences.Update(ctx, "aud_abc123", sendry.UpdateAudienceParams{
 //	    Name: "VIP Subscribers",
 //	})
 func (r *AudiencesResource) Update(ctx context.Context, id string, params UpdateAudienceParams) (*Audience, error) {
@@ -96,7 +96,7 @@ func (r *AudiencesResource) Remove(ctx context.Context, id string) (*DeleteRespo
 //
 // Example:
 //
-//	result, err := client.Audiences.AddContacts(ctx, "aud_abc123", sendr.AddContactsToAudienceParams{
+//	result, err := client.Audiences.AddContacts(ctx, "aud_abc123", sendry.AddContactsToAudienceParams{
 //	    ContactIDs: []string{"ct_1", "ct_2"},
 //	})
 //	fmt.Println(result.Added)

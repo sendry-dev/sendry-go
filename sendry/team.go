@@ -29,7 +29,7 @@ func (r *TeamResource) List(ctx context.Context) (*ListTeamResponse, error) {
 //
 // Example:
 //
-//	member, err := client.Team.Invite(ctx, sendr.InviteTeamMemberParams{
+//	member, err := client.Team.Invite(ctx, sendry.InviteTeamMemberParams{
 //	    Email: "colleague@acme.com",
 //	    Role:  "member",
 //	})
@@ -58,7 +58,7 @@ func (r *TeamResource) Remove(ctx context.Context, id string) (*DeleteResponse, 
 //
 // Example:
 //
-//	updated, err := client.Team.UpdateRole(ctx, "mem_abc123", sendr.UpdateTeamMemberRoleParams{
+//	updated, err := client.Team.UpdateRole(ctx, "mem_abc123", sendry.UpdateTeamMemberRoleParams{
 //	    Role: "admin",
 //	})
 func (r *TeamResource) UpdateRole(ctx context.Context, id string, params UpdateTeamMemberRoleParams) (*TeamMember, error) {

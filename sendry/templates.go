@@ -16,7 +16,7 @@ type TemplatesResource struct {
 //
 // Example:
 //
-//	tmpl, err := client.Templates.Create(ctx, sendr.CreateTemplateParams{
+//	tmpl, err := client.Templates.Create(ctx, sendry.CreateTemplateParams{
 //	    Name:    "Welcome Email",
 //	    Subject: "Welcome, {{name}}!",
 //	    HTML:    "<h1>Hello {{name}}</h1>",
@@ -68,7 +68,7 @@ func (r *TemplatesResource) Get(ctx context.Context, id string) (*Template, erro
 //
 // Example:
 //
-//	updated, err := client.Templates.Update(ctx, "tmpl_abc123", sendr.UpdateTemplateParams{
+//	updated, err := client.Templates.Update(ctx, "tmpl_abc123", sendry.UpdateTemplateParams{
 //	    Subject: "Updated Subject",
 //	})
 func (r *TemplatesResource) Update(ctx context.Context, id string, params UpdateTemplateParams) (*Template, error) {
@@ -96,7 +96,7 @@ func (r *TemplatesResource) Remove(ctx context.Context, id string) (*DeleteRespo
 //
 // Example:
 //
-//	result, err := client.Templates.Render(ctx, "tmpl_abc123", &sendr.RenderTemplateParams{
+//	result, err := client.Templates.Render(ctx, "tmpl_abc123", &sendry.RenderTemplateParams{
 //	    Variables: map[string]string{"name": "World"},
 //	})
 func (r *TemplatesResource) Render(ctx context.Context, id string, params *RenderTemplateParams) (*RenderTemplateResponse, error) {
@@ -158,7 +158,7 @@ func (r *TemplatesResource) GetVisualStarter(ctx context.Context, starterID stri
 //
 // Example:
 //
-//	result, err := client.Templates.CompileBlocks(ctx, sendr.CompileBlocksParams{
+//	result, err := client.Templates.CompileBlocks(ctx, sendry.CompileBlocksParams{
 //	    Design:    myBlockDesign,
 //	    Variables: map[string]string{"name": "Alice"},
 //	})
@@ -174,7 +174,7 @@ func (r *TemplatesResource) CompileBlocks(ctx context.Context, params CompileBlo
 //
 // Example:
 //
-//	result, err := client.Templates.RenderAdhoc(ctx, sendr.RenderAdhocParams{
+//	result, err := client.Templates.RenderAdhoc(ctx, sendry.RenderAdhocParams{
 //	    HTML:      "<h1>Hello {{name}}</h1>",
 //	    Variables: map[string]string{"name": "Bob"},
 //	})

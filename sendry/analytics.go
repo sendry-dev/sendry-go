@@ -15,7 +15,7 @@ type AnalyticsResource struct {
 //
 // Example:
 //
-//	stats, err := client.Analytics.Stats(ctx, sendr.AnalyticsParams{
+//	stats, err := client.Analytics.Stats(ctx, sendry.AnalyticsParams{
 //	    From:        "2025-01-01",
 //	    To:          "2025-01-31",
 //	    Granularity: "day",
@@ -40,7 +40,7 @@ func (r *AnalyticsResource) Stats(ctx context.Context, params AnalyticsParams) (
 //
 // Example:
 //
-//	logs, err := client.Analytics.Logs(ctx, &sendr.LogsParams{
+//	logs, err := client.Analytics.Logs(ctx, &sendry.LogsParams{
 //	    EmailID: "em_abc123",
 //	    Type:    "delivered",
 //	})
@@ -80,7 +80,7 @@ func (r *AnalyticsResource) Logs(ctx context.Context, params *LogsParams) (*Pagi
 //
 // Example:
 //
-//	cohorts, err := client.Analytics.GetCohorts(ctx, sendr.CohortParams{
+//	cohorts, err := client.Analytics.GetCohorts(ctx, sendry.CohortParams{
 //	    From:   "2025-01-01",
 //	    To:     "2025-01-31",
 //	    Metric: "open_rate",
@@ -103,7 +103,7 @@ func (r *AnalyticsResource) GetCohorts(ctx context.Context, params CohortParams)
 //
 // Example:
 //
-//	benchmarks, err := client.Analytics.GetBenchmarks(ctx, sendr.BenchmarkParams{
+//	benchmarks, err := client.Analytics.GetBenchmarks(ctx, sendry.BenchmarkParams{
 //	    From: "2025-01-01",
 //	    To:   "2025-01-31",
 //	})
@@ -134,7 +134,7 @@ func (r *AnalyticsResource) ToggleBenchmarkOptIn(ctx context.Context, optIn bool
 //
 // Example:
 //
-//	result, err := client.Analytics.GetBreakdowns(ctx, sendr.BreakdownParams{
+//	result, err := client.Analytics.GetBreakdowns(ctx, sendry.BreakdownParams{
 //	    From:    "2025-01-01",
 //	    To:      "2025-01-31",
 //	    GroupBy: "domain",
@@ -159,7 +159,7 @@ func (r *AnalyticsResource) GetBreakdowns(ctx context.Context, params BreakdownP
 //
 // Example:
 //
-//	comparison, err := client.Analytics.GetComparison(ctx, sendr.AnalyticsParams{
+//	comparison, err := client.Analytics.GetComparison(ctx, sendry.AnalyticsParams{
 //	    From: "2025-01-01",
 //	    To:   "2025-01-31",
 //	})
@@ -184,7 +184,7 @@ func (r *AnalyticsResource) GetComparison(ctx context.Context, params AnalyticsP
 //
 // Example:
 //
-//	data, err := client.Analytics.ExportData(ctx, sendr.ExportParams{
+//	data, err := client.Analytics.ExportData(ctx, sendry.ExportParams{
 //	    From:   "2025-01-01",
 //	    To:     "2025-01-31",
 //	    Format: "csv",

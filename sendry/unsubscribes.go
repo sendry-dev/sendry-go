@@ -16,7 +16,7 @@ type UnsubscribesResource struct {
 //
 // Example:
 //
-//	page, err := client.Unsubscribes.List(ctx, &sendr.ListUnsubscribesParams{
+//	page, err := client.Unsubscribes.List(ctx, &sendry.ListUnsubscribesParams{
 //	    ListID: "newsletter",
 //	})
 func (r *UnsubscribesResource) List(ctx context.Context, params *ListUnsubscribesParams) (*PaginatedResponse[UnsubscribeEntry], error) {
@@ -46,7 +46,7 @@ func (r *UnsubscribesResource) List(ctx context.Context, params *ListUnsubscribe
 //
 // Example:
 //
-//	entry, err := client.Unsubscribes.Create(ctx, sendr.CreateUnsubscribeParams{
+//	entry, err := client.Unsubscribes.Create(ctx, sendry.CreateUnsubscribeParams{
 //	    Email:  "user@example.com",
 //	    ListID: "newsletter",
 //	})
@@ -62,7 +62,7 @@ func (r *UnsubscribesResource) Create(ctx context.Context, params CreateUnsubscr
 //
 // Example:
 //
-//	result, err := client.Unsubscribes.CreateBatch(ctx, sendr.BatchUnsubscribeParams{
+//	result, err := client.Unsubscribes.CreateBatch(ctx, sendry.BatchUnsubscribeParams{
 //	    Emails: []string{"a@example.com", "b@example.com"},
 //	    ListID: "newsletter",
 //	})
