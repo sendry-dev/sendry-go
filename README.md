@@ -5,7 +5,7 @@ Official Go SDK for the [Sendry](https://sendry.online) email API.
 ## Installation
 
 ```bash
-go get github.com/sendry/sendry-go
+go get github.com/sendry-dev/sendry-go
 ```
 
 Requires Go 1.21 or later.
@@ -20,7 +20,7 @@ import (
     "fmt"
     "log"
 
-    "github.com/sendry/sendry-go/sendry"
+    "github.com/sendry-dev/sendry-go/sendry"
 )
 
 func main() {
@@ -51,7 +51,7 @@ import (
     "net/http"
     "time"
 
-    "github.com/sendry/sendry-go/sendry"
+    "github.com/sendry-dev/sendry-go/sendry"
 )
 
 client := sendry.NewClient(
@@ -285,7 +285,7 @@ Sendry signs each webhook delivery with an HMAC-SHA256 signature. Always verify
 the signature before processing the event:
 
 ```go
-import "github.com/sendry/sendry-go/sendry"
+import "github.com/sendry-dev/sendry-go/sendry"
 
 func handleWebhook(w http.ResponseWriter, r *http.Request) {
     body, err := io.ReadAll(r.Body)
@@ -531,7 +531,7 @@ import (
     "errors"
     "fmt"
 
-    "github.com/sendry/sendry-go/sendry"
+    "github.com/sendry-dev/sendry-go/sendry"
 )
 
 resp, err := client.Emails.Send(ctx, params)

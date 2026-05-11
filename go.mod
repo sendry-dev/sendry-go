@@ -1,3 +1,3 @@
-module github.com/sendry/sendry-go
+module github.com/sendry-dev/sendry-go
 
 go 1.21
