@@ -1,0 +1,7 @@
+.DS_Store
+*.test
+*.out
+vendor/
+.env
+.env.*
+!.env.example
